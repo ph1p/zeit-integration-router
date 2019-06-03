@@ -2,9 +2,9 @@ import { withUiHook, htm } from '@zeit/integration-utils';
 import { createRouter } from './libs/router';
 import { HandlerOptionsRouter } from './types';
 
-const { initRouter, addRoute } = createRouter('/');
-
 import { Home, Test1, Test2, Test3 } from './views';
+
+const { initRouter, addRoute } = createRouter();
 
 addRoute('/', Home);
 addRoute('/test/:id', Test1);
@@ -12,7 +12,7 @@ addRoute('/test2', Test2);
 addRoute('/test3', Test3);
 
 const uiHook = withUiHook(async (handler: HandlerOptionsRouter) => {
-  await initRouter(handler);
+  await initRouter(handler, '/test3', true);
 
   const {
     payload: { action },

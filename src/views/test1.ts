@@ -11,6 +11,7 @@ export async function Test1(handler: HandlerOptionsRouter, params: Params) {
 
     <B>Path Params:</B> ${params.id}
     <BR/><BR/>
+    ${Math.random()}
     <B>test1</B>
     <BR/><BR/>
     <Button action="notify">open notification</Button>

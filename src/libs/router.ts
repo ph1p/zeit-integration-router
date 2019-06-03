@@ -2,10 +2,10 @@ import { htm } from '@zeit/integration-utils';
 import Route from 'route-parser';
 import { HandlerOptionsRouter, Routes, Params } from '../types';
 
-export const createRouter = function(defaultRoute = '/') {
+export const createRouter = function() {
   const routes: Array<Routes> = [];
 
-  let currentRoute: any = defaultRoute;
+  let currentRoute = '';
 
   return {
     addRoute(
@@ -18,9 +18,9 @@ export const createRouter = function(defaultRoute = '/') {
         fn
       });
     },
-    async initRouter(handler: HandlerOptionsRouter, loadDefaultRoute = false) {
+    async initRouter(handler: HandlerOptionsRouter, initRoute = '/', loadDefaultRoute = false) {
       if (loadDefaultRoute) {
-        currentRoute = defaultRoute;
+        currentRoute = initRoute;
       }
 
       handler.router = {
