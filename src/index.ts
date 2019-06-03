@@ -4,10 +4,7 @@ import { HandlerOptionsRouter } from './types';
 
 const { initRouter, addRoute } = createRouter('/');
 
-import Home from './views/home';
-import Test1 from './views/test1';
-import Test2 from './views/test2';
-import Test3 from './views/test3';
+import { Home, Test1, Test2, Test3 } from './views';
 
 addRoute('/', Home);
 addRoute('/test/:id', Test1);
@@ -18,27 +15,27 @@ const uiHook = withUiHook(async (handler: HandlerOptionsRouter) => {
   await initRouter(handler);
 
   const {
-    router: { navigate, Routes },
-    currentRoute
+    payload: { action },
+    router: { navigate, Routes }
   } = handler;
 
-  if (handler.payload.action === 'home') {
-    navigate('/');
+  if (action === 'home') {
+    await navigate('/');
   }
-  if (handler.payload.action === 'test1') {
-    navigate('/test/4f96e758-8640-11e9-bc42-526af7764f64');
+  if (action === 'test1') {
+    await navigate('/test/4f96e758-8640-11e9-bc42-526af7764f64');
   }
-  if (handler.payload.action === 'test2') {
-    navigate('/test2');
+  if (action === 'test2') {
+    await navigate('/test2');
   }
-  if (handler.payload.action === 'test3') {
-    navigate('/test3');
+  if (action === 'test3') {
+    await navigate('/test3');
   }
-  if (handler.payload.action === 'fail') {
-    navigate('/fail');
+  if (action === 'fail') {
+    await navigate('/fail');
   }
 
-  return htm`<Page>
+  const Page = async (Route: any, currentRoute: string) => htm`<Page>
     <Box display="grid" gridTemplateColumns="100px 1fr" gridGap="15px">
       <Box backgroundColor="white" borderRadius="5px" border="1px solid #ddd" padding="15px">
         <Button action="home" small highlight>home</Button><BR />
@@ -48,13 +45,15 @@ const uiHook = withUiHook(async (handler: HandlerOptionsRouter) => {
         <Button action="fail" small warning>fail</Button>
       </Box>
       <Box backgroundColor="white" borderRadius="5px" border="1px solid #ddd" padding="15px">
-        ${await Routes()}
+        ${await Route}
       </Box>
       <Box backgroundColor="white" gridColumn="1 / span 2" borderRadius="5px" border="1px solid #ddd" padding="15px">
         Your are here: <B>${currentRoute}</B>
       </Box>
     </Box>
   </Page>`;
+
+  return Routes(Page);
 });
 
 export default uiHook;

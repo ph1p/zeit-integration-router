@@ -1,6 +1,6 @@
 import { htm } from '@zeit/integration-utils';
 
-export default async function () {
+export async function Home() {
   return htm`<Box>
     <B>home</B>
   </Box>`;

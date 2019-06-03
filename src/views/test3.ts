@@ -1,7 +1,7 @@
 import { htm } from '@zeit/integration-utils';
 import { HandlerOptionsRouter } from '../types';
 
-export default async function RouteView(handler: HandlerOptionsRouter) {
+export async function Test3(handler: HandlerOptionsRouter) {
   if (handler.payload.action === 'notify') {
     handler.router.navigate('/');
   }

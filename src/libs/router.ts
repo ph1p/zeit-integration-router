@@ -21,19 +21,20 @@ export const createRouter = function(defaultRoute = '/') {
       if (loadDefaultRoute) {
         currentRoute = defaultRoute;
       }
-      handler.currentRoute = currentRoute;
+
       handler.router = {
-        currentRoute,
         async navigate(path: string): Promise<void> {
           currentRoute = path;
-          handler.currentRoute = path;
         },
-        async Routes() {
+        async Routes(callback) {
           const route = routes.find(route => route.path.match(currentRoute));
 
-          return route
-            ? route.fn(handler, route.path.match(currentRoute) || {})
-            : (() => htm`no match`)();
+          return callback(
+            route
+              ? route.fn(handler, route.path.match(currentRoute) || {})
+              : (() => htm`no match`)(),
+            currentRoute
+          );
         }
       };
     }

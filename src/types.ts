@@ -1,16 +1,10 @@
 import { HandlerOptions } from '@zeit/integration-utils';
 
-export declare function RouteView(
-  handler?: HandlerOptionsRouter,
-  params?: Params
-): Promise<string> | string;
-
 export interface HandlerOptionsRouter extends HandlerOptions {
   currentRoute?: string;
   router?: {
-    currentRoute: string;
     navigate: (name: string) => void;
-    Routes: () => any;
+    Routes: (fn: (Route: any, currentRoute: string) => any) => any;
   };
 }
 

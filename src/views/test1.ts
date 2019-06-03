@@ -1,7 +1,7 @@
 import { htm } from '@zeit/integration-utils';
 import { HandlerOptionsRouter, Params } from '../types';
 
-export default async function RouteView(handler: HandlerOptionsRouter, params: Params) {
+export async function Test1(handler: HandlerOptionsRouter, params: Params) {
   return htm`<Box>
     ${
       handler.payload.action === 'notify'
