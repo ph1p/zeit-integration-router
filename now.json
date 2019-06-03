@@ -1,0 +1,17 @@
+{
+  "name": "zeit-integration-router",
+  "version": 2,
+  "alias": ["zeit-integration-router.now.sh"],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/src/index.ts"
+    }
+  ],
+  "builds": [
+    {
+      "src": "src/**/*.ts",
+      "use": "@now/node"
+    }
+  ]
+}
