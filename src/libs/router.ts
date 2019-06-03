@@ -14,6 +14,7 @@ export const createRouter = function(defaultRoute = '/') {
     ) {
       routes.push({
         path: new Route(path),
+        realPath: path,
         fn
       });
     },

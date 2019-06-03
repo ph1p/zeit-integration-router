@@ -3,7 +3,7 @@ import { HandlerOptionsRouter } from '../types';
 
 export async function Test3(handler: HandlerOptionsRouter) {
   if (handler.payload.action === 'notify') {
-    handler.router.navigate('/');
+    await handler.router.navigate('/');
   }
 
   return htm`<Box>

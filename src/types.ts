@@ -14,6 +14,7 @@ export interface Params {
 
 export interface Routes {
   path: any;
+  realPath: string;
   fn: (
     handler?: HandlerOptionsRouter,
     params?: Params
