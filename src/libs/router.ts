@@ -32,7 +32,7 @@ class ZeitRouter {
    * @returns
    * @memberof ZeitRouter
    */
-  async routerUiHook(callback: (handler: HandlerOptionsRouter) => any) {
+  routerUiHook(callback: (handler: HandlerOptionsRouter) => any) {
     const self = this;
 
     /**

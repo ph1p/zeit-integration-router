@@ -15,37 +15,31 @@ This is a small router concept for zeit integrations. It support the basic funct
 The only file you need is `libs/router.ts`. Import it at the top of your entrypoint.
 
 Like this:
+
 ```javascript
 import app from './libs/router';
 ```
+
 `libs/router.ts` currently returns a singleton and you can name it as you want. The Routes has 2 Methods.
 
-* The `app.routerUiHook` method wraps `withUiHook` and adds a small `router` object to the `handler` object.
-* And the `app.add('path/:param/, YourComponent)`. This method adds a new route.
+- The `app.routerUiHook` method wraps `withUiHook` and adds a small `router` object to the `handler` object.
+- And the `app.add('path/:param/, YourComponent)`. This method adds a new route.
 
+---
 
 ## `router`-object
 
 #### navigate(path)
 
-* Navigate through a specific route.
-
+- Navigate through a specific route.
 
 #### currentRoute()
 
-* Shows the current route. Returns a promise.
-
+- Shows the current route. Returns a promise.
 
 #### renderRoute(path)
 
-* Renders a specific route.
-
-
-#### currentPath
-
-* Get current path as a string.
-
-
+- Renders a specific route.
 
 ### Example:
 
@@ -56,13 +50,11 @@ import { Home, Parameter } from './views';
 app.add('/', Home);
 app.add('/parameter/:id', Parameter);
 
-// call
-const uiHook = app.routerUiHook(async (handler) => {
+export default app.routerUiHook(async handler => {
   const {
-    payload: {
-      action,
-    },
-    router: { Routes, navigate }
+    currentPath,
+    payload: { action },
+    router: { currentRoute, navigate }
   } = handler;
 
   if (action === 'home') {
@@ -77,15 +69,12 @@ const uiHook = app.routerUiHook(async (handler) => {
     <Button action="parameter" small highlight>parameter</Button>
     <Button action="fail" small warning>fail</Button>
 
-    ${await Routes()}
+    ${await currentRoute()}
 
-    Your are here: <B>${app.currentRoute}</B>
+    Your are here: <B>${currentPath}</B>
   </Page>`;
 });
-
-export default uiHook;
 ```
-
 
 ## Development
 

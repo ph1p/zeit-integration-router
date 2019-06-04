@@ -1,6 +1,7 @@
 import { htm } from '@zeit/integration-utils';
 import app from './libs/router';
 import { Home, Parameter, Include, Form, JumpToHome } from './views';
+import { HandlerOptionsRouter } from '../dist/types';
 
 app.add('/', Home);
 app.add('/parameter/:id', Parameter);
@@ -8,11 +9,9 @@ app.add('/include', Include);
 app.add('/form', Form);
 app.add('/jump-to-home', JumpToHome);
 
-const uiHook = app.routerUiHook(async (handler) => {
+const uiHook = app.routerUiHook(async (handler: HandlerOptionsRouter) => {
   const {
-    payload: {
-      action,
-    },
+    payload: { action },
     router: { currentRoute, navigate }
   } = handler;
 
