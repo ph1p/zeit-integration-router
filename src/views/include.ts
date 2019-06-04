@@ -13,7 +13,7 @@ export async function Include(handler: HandlerOptionsRouter) {
 
     <Box border="1px solid #ddd" padding="20px">
       <H2>I'm page <B>parameter</B></H2>
-      ${await handler.router.Route('/parameter/1234')}
+      ${await handler.router.renderRoute('/parameter/1234')}
     </Box>
   </Box>`;
 }

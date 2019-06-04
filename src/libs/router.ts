@@ -4,12 +4,17 @@ import { HandlerOptionsRouter, Route, Params } from '../types';
 
 class ZeitRouter {
   private routes: Array<Route> = [];
-  public currentRoute: string;
+  public currentPath: string;
 
   constructor() {
-    this.currentRoute = '/';
+    this.currentPath = '/';
   }
 
+  /**
+   * Adds a route
+   * @param path
+   * @param fn
+   */
   add(
     path: string,
     fn: (handler: HandlerOptionsRouter, params: Params) => Promise<string>
@@ -20,13 +25,24 @@ class ZeitRouter {
       fn
     });
   }
-
+  /**
+   *
+   *
+   * @param {(handler: HandlerOptionsRouter) => any} callback
+   * @returns
+   * @memberof ZeitRouter
+   */
   async routerUiHook(callback: (handler: HandlerOptionsRouter) => any) {
     const self = this;
 
+    /**
+     * get a specfic route
+     * @param handler
+     * @param path
+     */
     async function getRoute(
       handler: HandlerOptionsRouter,
-      path: string = self.currentRoute
+      path: string = self.currentPath
     ): Promise<any> {
       const route = self.routes.find(route => route.path.match(path));
 
@@ -36,17 +52,30 @@ class ZeitRouter {
     }
 
     return withUiHook(async (handler: HandlerOptionsRouter) => {
-      handler.currentRoute = self.currentRoute;
-      if (!handler.router) {
-        handler.router = {
-          navigate(path: string): void {
-            handler.currentRoute = path;
-            self.currentRoute = path;
-          },
-          Route: async (path: string) => getRoute(handler, path),
-          Routes: async () => getRoute(handler)
-        };
-      }
+      handler.currentPath = self.currentPath;
+      handler.router = {
+        /**
+         * navigate to a new route
+         * @param path
+         */
+        navigate(path: string): void {
+          if (path !== self.currentPath) {
+            handler.currentPath = path;
+            self.currentPath = path;
+
+            callback(handler);
+          }
+        },
+        /**
+         * get a specfic route view
+         * @param path
+         */
+        renderRoute: async (path: string) => getRoute(handler, path),
+        /**
+         * get the current route
+         */
+        currentRoute: async () => getRoute(handler)
+      };
 
       return callback(handler);
     });

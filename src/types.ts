@@ -1,12 +1,12 @@
 import { HandlerOptions } from '@zeit/integration-utils';
 
 export interface HandlerOptionsRouter extends HandlerOptions {
-  currentRoute?: string;
+  currentPath?: string;
   router?: {
-    currentRoute?: string;
+    currentPath?: string;
     navigate?: (name: string) => void;
-    Route: (name: string) => Promise<string> | string;
-    Routes: () => any;
+    renderRoute: (name: string) => Promise<string> | string;
+    currentRoute(): any;
   };
 }
 

@@ -13,7 +13,7 @@ const uiHook = app.routerUiHook(async (handler) => {
     payload: {
       action,
     },
-    router: { Routes, navigate }
+    router: { currentRoute, navigate }
   } = handler;
 
   if (action === 'home') {
@@ -46,10 +46,10 @@ const uiHook = app.routerUiHook(async (handler) => {
         <Button action="fail" small warning>fail</Button>
       </Box>
       <Box backgroundColor="white" borderRadius="5px" border="1px solid #ddd" padding="15px">
-        ${await Routes()}
+        ${await currentRoute()}
       </Box>
       <Box backgroundColor="white" gridColumn="1 / span 2" borderRadius="5px" border="1px solid #ddd" padding="15px">
-        Your are here: <B>${app.currentRoute}</B>
+        Your are here: <B>${handler.currentPath}</B>
       </Box>
     </Box>
   </Page>`;
