@@ -4,17 +4,27 @@
   <img src="./assets/kapture.gif">
 </p>
 
-This is a small router concept for zeit integrations.
+## What is this?
+
+This is a small router concept for zeit integrations. It support the basic functionality of a router and some extras like parameters.
 
 **DEMO**: [https://zeit.co/integrations/integration-router](https://zeit.co/integrations/integration-router)
 
-### How to?
+## How to?
 
 The only file you need is `libs/router.ts`. Import it at the top of your entrypoint.
-The `app.routerUiHook` method wraps `withUiHook` and adds a small `router` object to the `handler` object.
-`app.add('path/:param/, YourComponent)` adds a route.
 
-### `router`-object
+Like this:
+```javascript
+import app from './libs/router';
+```
+`libs/router.ts` currently returns a singleton and you can name it as you want. The Routes has 2 Methods.
+
+* The `app.routerUiHook` method wraps `withUiHook` and adds a small `router` object to the `handler` object.
+* And the `app.add('path/:param/, YourComponent)`. This method adds a new route.
+
+
+## `router`-object
 
 #### navigate(path)
 
@@ -75,3 +85,22 @@ const uiHook = app.routerUiHook(async (handler) => {
 
 export default uiHook;
 ```
+
+
+## Development
+
+Just clone this repository and run:
+
+```bash
+yarn install && yarn dev
+```
+
+or
+
+```bash
+npm install && npm run dev
+```
+
+The server starts on port **5005** and refreshes automatically.
+
+[More information](https://zeit.co/docs/integrations/#creating-an-integration/step-2-creating-a-uihook/running-the-uihook-locally)
