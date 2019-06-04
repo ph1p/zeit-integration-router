@@ -3,8 +3,10 @@ import { HandlerOptions } from '@zeit/integration-utils';
 export interface HandlerOptionsRouter extends HandlerOptions {
   currentRoute?: string;
   router?: {
-    navigate: (name: string) => void;
-    Routes: (fn: (Route: any, currentRoute: string) => any) => any;
+    currentRoute?: string;
+    navigate?: (name: string) => void;
+    Route: (name: string) => Promise<string> | string;
+    Routes: () => any;
   };
 }
 
@@ -12,7 +14,7 @@ export interface Params {
   [key: string]: string | number;
 }
 
-export interface Routes {
+export interface Route {
   path: any;
   realPath: string;
   fn: (

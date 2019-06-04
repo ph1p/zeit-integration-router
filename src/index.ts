@@ -1,59 +1,58 @@
-import { withUiHook, htm } from '@zeit/integration-utils';
-import { createRouter } from './libs/router';
-import { HandlerOptionsRouter } from './types';
+import { htm } from '@zeit/integration-utils';
+import app from './libs/router';
+import { Home, Parameter, Include, Form, JumpToHome } from './views';
 
-import { Home, Test1, Test2, Test3 } from './views';
+app.add('/', Home);
+app.add('/parameter/:id', Parameter);
+app.add('/include', Include);
+app.add('/form', Form);
+app.add('/jump-to-home', JumpToHome);
 
-const { initRouter, addRoute } = createRouter();
-
-addRoute('/', Home);
-addRoute('/test/:id', Test1);
-addRoute('/test2', Test2);
-addRoute('/test3', Test3);
-
-const uiHook = withUiHook(async (handler: HandlerOptionsRouter) => {
-  await initRouter(handler, '/test3', true);
-
+const uiHook = app.routerUiHook(async (handler) => {
   const {
-    payload: { action },
-    router: { navigate, Routes }
+    payload: {
+      action,
+    },
+    router: { Routes, navigate }
   } = handler;
 
   if (action === 'home') {
-    await navigate('/');
+    navigate('/');
   }
-  if (action === 'test1') {
-    await navigate('/test/4f96e758-8640-11e9-bc42-526af7764f64');
+  if (action === 'parameter') {
+    navigate('/parameter/4f96e758-8640-11e9-bc42-526af7764f64');
   }
-  if (action === 'test2') {
-    await navigate('/test2');
+  if (action === 'include') {
+    navigate('/include');
   }
-  if (action === 'test3') {
-    await navigate('/test3');
+  if (action === 'form') {
+    navigate('/form');
+  }
+  if (action === 'jump-to-home') {
+    navigate('/jump-to-home');
   }
   if (action === 'fail') {
-    await navigate('/fail');
+    navigate('/fail');
   }
 
-  const Page = async (Route: any, currentRoute: string) => htm`<Page>
-    <Box display="grid" gridTemplateColumns="100px 1fr" gridGap="15px">
-      <Box backgroundColor="white" borderRadius="5px" border="1px solid #ddd" padding="15px">
-        <Button action="home" small highlight>home</Button><BR />
-        <Button action="test1" small highlight>test1</Button><BR />
-        <Button action="test2" small highlight>test2</Button><BR />
-        <Button action="test3" small highlight>test3</Button>
+  return htm`<Page>
+    <Box display="grid" gridTemplateColumns="200px 1fr" gridGap="15px">
+      <Box backgroundColor="white" borderRadius="5px" border="1px solid #ddd" padding="15px" display="grid" gridTemplateRows="repeat(6, 35px)">
+        <Button action="home" small highlight>home</Button>
+        <Button action="parameter" small highlight>parameter</Button>
+        <Button action="include" small highlight>include</Button>
+        <Button action="form" small highlight>form</Button>
+        <Button action="jump-to-home" small highlight>jump-to-home</Button>
         <Button action="fail" small warning>fail</Button>
       </Box>
       <Box backgroundColor="white" borderRadius="5px" border="1px solid #ddd" padding="15px">
-        ${await Route}
+        ${await Routes()}
       </Box>
       <Box backgroundColor="white" gridColumn="1 / span 2" borderRadius="5px" border="1px solid #ddd" padding="15px">
-        Your are here: <B>${currentRoute}</B>
+        Your are here: <B>${app.currentRoute}</B>
       </Box>
     </Box>
   </Page>`;
-
-  return Routes(Page);
 });
 
 export default uiHook;

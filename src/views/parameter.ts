@@ -1,7 +1,7 @@
 import { htm } from '@zeit/integration-utils';
 import { HandlerOptionsRouter, Params } from '../types';
 
-export async function Test1(handler: HandlerOptionsRouter, params: Params) {
+export async function Parameter(handler: HandlerOptionsRouter, params: Params) {
   return htm`<Box>
     ${
       handler.payload.action === 'notify'
@@ -11,9 +11,8 @@ export async function Test1(handler: HandlerOptionsRouter, params: Params) {
 
     <B>Path Params:</B> ${params.id}
     <BR/><BR/>
-    ${Math.random()}
-    <B>test1</B>
+    Random Number: ${Math.random()}
     <BR/><BR/>
-    <Button action="notify">open notification</Button>
+    <Button action="notify">open Notification</Button>
   </Box>`;
 }
