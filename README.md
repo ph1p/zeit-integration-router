@@ -26,7 +26,7 @@ const app = new ZeitRouter('/');
 
 ### add(path, cb)
 
-This method adds a route. You can define the path like yu do in `express` or other frameworks.
+This method adds a route. You can define the path like you do in `express` or other frameworks.
 The callback function gives you `handler(zeitClient, payload)`, `router` and `params`. You have to return a `htm` method.
 
 ```javascript
@@ -43,7 +43,7 @@ This methods wraps `withUiHook` and adds an additional `router`-object to the ca
 
 ```javascript
 export default app.uiHook(async (handler: HandlerOptions, router: Router) => {
-  return htm`<Page>${router.currentPath}`;
+  return htm`<Page>${router.currentPath}</Page>`;
 });
 ```
 
