@@ -32,16 +32,15 @@ const uiHook = app.uiHook(async (handler: HandlerOptions, router: Router) => {
   }
 
   // redirect if logged in or out
-  router.navigate(userIsLoggedIn ? '/login' : '/');
-
   if (userIsLoggedIn) {
     return htm`<Page>
-      <Box backgroundColor="white" borderRadius="5px" border="1px solid #ddd" padding="15px">
-        ${await router.currentRoute}
-      </Box>
-    </Page>`;
-  } else {
-    return htm`<Page>
+    <Box backgroundColor="white" borderRadius="5px" border="1px solid #ddd" padding="15px">
+      ${await router.renderRoute('/login')}
+    </Box>
+  </Page>`;
+  }
+
+  return htm`<Page>
       <Box display="grid" gridTemplateColumns="200px 1fr" gridGap="15px">
         <Box backgroundColor="white" borderRadius="5px" border="1px solid #ddd" padding="15px" display="grid" gridTemplateRows="repeat(6, 35px)">
           <Button action="home" small highlight>home</Button>
@@ -59,7 +58,6 @@ const uiHook = app.uiHook(async (handler: HandlerOptions, router: Router) => {
         </Box>
       </Box>
     </Page>`;
-  }
 });
 
 export default uiHook;
