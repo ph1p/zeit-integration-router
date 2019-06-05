@@ -1,7 +1,7 @@
 import { htm } from '@zeit/integration-utils';
-import { HandlerOptionsRouter } from '../types';
+import { Router } from '../../types';
 
-export async function Include(handler: HandlerOptionsRouter) {
+export async function Include({ router = <Router>{} }) {
   return htm`<Box>
     <B>Include</B>
 
@@ -13,7 +13,7 @@ export async function Include(handler: HandlerOptionsRouter) {
 
     <Box border="1px solid #ddd" padding="20px">
       <H2>I'm page <B>parameter</B></H2>
-      ${await handler.router.renderRoute('/parameter/1234')}
+      ${await router.renderRoute('/parameter/1234')}
     </Box>
   </Box>`;
 }

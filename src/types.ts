@@ -1,12 +1,13 @@
 import { HandlerOptions } from '@zeit/integration-utils';
 
-export interface HandlerOptionsRouter extends HandlerOptions {
+export interface Router {
   currentPath?: string;
-  router?: {
-    navigate: (name: string) => void;
-    renderRoute: (name: string) => Promise<string> | string;
-    currentRoute(): any;
-  };
+  navigate: (name: string) => void;
+  renderRoute: (name: string) => Promise<string> | string;
+  currentRoute?(): any;
+}
+export interface HandlerOptions extends HandlerOptions {
+  router?: Router;
 }
 
 export interface Params {
@@ -14,10 +15,24 @@ export interface Params {
 }
 
 export interface Route {
+  handler?: HandlerOptions;
+  router?: Router;
+  params?: Params;
+}
+export interface RouteCallback {
+  (route?: Route): Promise<string> | string;
+}
+
+export interface RouteItem {
   path: any;
   realPath: string;
-  fn: (
-    handler?: HandlerOptionsRouter,
-    params?: Params
-  ) => Promise<string> | string;
+  fn: RouteCallback;
+}
+
+export interface ZeitRouterInterface {
+  currentPath: string;
+  uiHook: (
+    callback: (handler: HandlerOptions, router?: any) => any
+  ) => any;
+  add(path: string, fn: RouteCallback): void;
 }

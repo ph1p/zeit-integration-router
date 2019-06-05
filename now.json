@@ -5,12 +5,12 @@
   "routes": [
     {
       "src": "/",
-      "dest": "/src/index.ts"
+      "dest": "src/example/index.ts"
     }
   ],
   "builds": [
     {
-      "src": "src/**/*.ts",
+      "src": "./src/**/*.ts",
       "use": "@now/node"
     }
   ]

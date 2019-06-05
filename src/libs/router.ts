@@ -1,13 +1,24 @@
 import { withUiHook, htm } from '@zeit/integration-utils';
 import RouteParser from 'route-parser';
-import { HandlerOptionsRouter, Route, Params } from '../types';
+import {
+  HandlerOptions,
+  RouteItem,
+  Router,
+  ZeitRouterInterface,
+  RouteCallback
+} from '../types';
 
-class ZeitRouter {
-  private routes: Array<Route> = [];
+
+class ZeitRouter implements ZeitRouterInterface {
+  private routes: Array<RouteItem> = [];
   public currentPath: string;
 
-  constructor() {
-    this.currentPath = '/';
+  /**
+   * Start path
+   * @param path
+   */
+  constructor(path: string = '/') {
+    this.currentPath = path;
   }
 
   /**
@@ -17,8 +28,8 @@ class ZeitRouter {
    */
   add(
     path: string,
-    fn: (handler: HandlerOptionsRouter, params: Params) => Promise<string>
-  ) {
+    fn: RouteCallback
+  ): void {
     this.routes.push({
       path: new RouteParser(path),
       realPath: path,
@@ -28,11 +39,10 @@ class ZeitRouter {
   /**
    *
    *
-   * @param {(handler: HandlerOptionsRouter) => any} callback
    * @returns
    * @memberof ZeitRouter
    */
-  routerUiHook(callback: (handler: HandlerOptionsRouter) => any) {
+  uiHook(callback: (handler: HandlerOptions, router?: any) => any) {
     const self = this;
 
     /**
@@ -40,46 +50,64 @@ class ZeitRouter {
      * @param handler
      * @param path
      */
-    async function getRoute(
-      handler: HandlerOptionsRouter,
-      path: string = self.currentPath
-    ): Promise<any> {
+    function getRoute(
+      handler: HandlerOptions,
+      path: string = self.currentPath,
+      router: Router
+    ): any {
       const route = self.routes.find(route => route.path.match(path));
 
       return route
-        ? route.fn(handler, route.path.match(path) || {})
+        ? route.fn({ handler, router, params: route.path.match(path) || {} })
         : (() => htm`Sorry, but this page does not exist :/`)();
     }
 
-    return withUiHook(async (handler: HandlerOptionsRouter) => {
-      handler.currentPath = self.currentPath;
-      handler.router = {
-        /**
-         * navigate to a new route
-         * @param path
-         */
-        navigate(path: string): void {
-          if (path !== self.currentPath) {
-            handler.currentPath = path;
-            self.currentPath = path;
+    return withUiHook(async (handler: HandlerOptions) => {
+      // detect route
+      if (handler.payload.action.startsWith('/')) {
+        self.currentPath = handler.payload.action;
+      }
 
-            callback(handler);
-          }
+      /**
+       * navigate to a new route
+       * @param path
+       */
+      const navigate = (path: string): void => {
+        if (path !== self.currentPath) {
+          self.currentPath = path;
+        }
+      };
+
+      /**
+       * get a specfic route view
+       * @param path
+       */
+      const renderRoute = (path: string) =>
+        getRoute(handler, path, {
+          renderRoute,
+          navigate
+        });
+
+      const router = {
+        get currentPath(): string {
+          return self.currentPath;
         },
-        /**
-         * get a specfic route view
-         * @param path
-         */
-        renderRoute: async (path: string) => getRoute(handler, path),
         /**
          * get the current route
          */
-        currentRoute: async () => getRoute(handler)
+        get currentRoute() {
+          return getRoute(handler, self.currentPath, {
+            navigate,
+            renderRoute
+          });
+        },
+        renderRoute,
+        navigate
       };
 
-      return callback(handler);
+      return callback(handler, router);
     });
   }
 }
 
-export default new ZeitRouter();
+export default ZeitRouter;

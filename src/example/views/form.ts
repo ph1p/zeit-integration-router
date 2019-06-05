@@ -1,7 +1,7 @@
 import { htm } from '@zeit/integration-utils';
-import { HandlerOptionsRouter } from '../types';
+import { HandlerOptions } from '../../types';
 
-export async function Form(handler: HandlerOptionsRouter) {
+export async function Form({ handler = <HandlerOptions>{} }) {
   const data = handler.payload.clientState.field;
 
   return htm`<Box>

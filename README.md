@@ -13,6 +13,7 @@ This is a small router concept for zeit integrations. It support the basic funct
 ## How to?
 
 The only file you need is `libs/router.ts`. Import it at the top of your entrypoint.
+All `actions` which start with a `/`, will automatically navigate trough the matching route.
 
 Like this:
 
@@ -20,10 +21,29 @@ Like this:
 import app from './libs/router';
 ```
 
-`libs/router.ts` currently returns a singleton and you can name it as you want. The Routes has 2 Methods.
+`libs/router.ts` returns a class. The class has 2 Methods.
 
-- The `app.routerUiHook` method wraps `withUiHook` and adds a small `router` object to the `handler` object.
-- And the `app.add('path/:param/, YourComponent)`. This method adds a new route.
+### add(path, cb)
+
+This method adds a route. You can define the parameters like ypu do in express or other frameworks:
+
+```javascript
+app.add('/:id', ({ handler, router, params }) => {
+  return htm`<Box>
+    <B>${params.id}</B>
+  </Box>`;
+});
+```
+
+### uiHook(handler, router)
+
+This methods wraps `withUiHook` and adds an additional `router`-object to the callback function.
+
+```javascript
+export default app.uiHook(async (handler: HandlerOptions, router: Router) => {
+  return htm`<Page>${router.currentPath}`;
+});
+```
 
 ---
 
@@ -31,9 +51,9 @@ import app from './libs/router';
 
 #### navigate(path)
 
-- Navigate through a specific route.
+- Navigate through a specific route. Works only inside the `app.uiHook`.
 
-#### currentRoute()
+#### currentRoute
 
 - Shows the current route. Returns a promise.
 
@@ -44,52 +64,62 @@ import app from './libs/router';
 ### Example:
 
 ```javascript
-import app from './libs/router';
-import { Home, Parameter } from './views';
+import ZeitRouter from './libs/router';
+import { HandlerOptions, Router } from '../types';
 
-app.add('/', Home);
-app.add('/parameter/:id', Parameter);
+const app = new ZeitRouter('/');
 
-export default app.routerUiHook(async handler => {
+app.add('/', () => {
+  return htm`<Box>
+    <B>home</B>
+  </Box>`;
+});
+
+app.add('/parameter/:id', ({ params }) => {
+  return htm`<Box>
+    <B>${params.id}</B>
+  </Box>`;
+});
+
+const uiHook = app.uiHook(async (handler: HandlerOptions, router: Router) => {
   const {
-    currentPath,
-    payload: { action },
-    router: { currentRoute, navigate }
+    payload: { action }
   } = handler;
 
   if (action === 'home') {
-    navigate('/');
-  }
-  if (action === 'parameter') {
-    navigate('/parameter/4f96e758-8640-11e9-bc42-526af7764f64');
+    router.navigate('/');
   }
 
   return htm`<Page>
     <Button action="home" small highlight>home</Button>
-    <Button action="parameter" small highlight>parameter</Button>
+    <Button action="/parameter/123" small highlight>parameter</Button>
     <Button action="fail" small warning>fail</Button>
 
-    ${await currentRoute()}
+    ${await router.currentRoute}
 
-    Your are here: <B>${currentPath}</B>
+    Your are here: <B>${router.currentPath}</B>
   </Page>`;
 });
 ```
 
 ## Development
 
-Just clone this repository and run:
+1. clone this repository
+2. install the [now cli](https://github.com/zeit/now-cli)
+3. run following commands:
 
 ```bash
-yarn install && yarn dev
+yarn install && yarn now:dev
 ```
 
 or
 
 ```bash
-npm install && npm run dev
+npm install && npm run now:dev
 ```
 
-The server starts on port **5005** and refreshes automatically.
+4. The server starts on port **5005**
 
 [More information](https://zeit.co/docs/integrations/#creating-an-integration/step-2-creating-a-uihook/running-the-uihook-locally)
+
+You can also use `yarn dev` or `npm run dev`. This command will start a dev server which supports autoreloading on file change. (You need to install `nodemon`)
