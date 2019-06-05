@@ -8,9 +8,14 @@ import {
   RouteCallback
 } from '../types';
 
-
 class ZeitRouter implements ZeitRouterInterface {
   private routes: Array<RouteItem> = [];
+  private config: {
+    [configId: string]: {
+      currentPath: string;
+    };
+  } = {};
+  private currentConfiguration: string;
   public currentPath: string;
 
   /**
@@ -18,7 +23,13 @@ class ZeitRouter implements ZeitRouterInterface {
    * @param path
    */
   constructor(path: string = '/') {
-    this.currentPath = path;
+    this.currentPath = this.currentConfig
+      ? this.currentConfig.currentPath
+      : path;
+  }
+
+  get currentConfig() {
+    return this.config[this.currentConfiguration];
   }
 
   /**
@@ -26,10 +37,7 @@ class ZeitRouter implements ZeitRouterInterface {
    * @param path
    * @param fn
    */
-  add(
-    path: string,
-    fn: RouteCallback
-  ): void {
+  add(path: string, fn: RouteCallback): void {
     this.routes.push({
       path: new RouteParser(path),
       realPath: path,
@@ -37,7 +45,7 @@ class ZeitRouter implements ZeitRouterInterface {
     });
   }
   /**
-   *
+   * The uiHook-wrapper
    *
    * @returns
    * @memberof ZeitRouter
@@ -63,9 +71,21 @@ class ZeitRouter implements ZeitRouterInterface {
     }
 
     return withUiHook(async (handler: HandlerOptions) => {
+      if (!self.currentConfig) {
+        self.config[handler.payload.configurationId] = {
+          currentPath: self.currentPath
+        };
+        self.currentConfiguration = handler.payload.configurationId;
+      }
+
+      const config = self.currentConfig || {
+        currentPath: self.currentPath
+      };
+
       // detect route
       if (handler.payload.action.startsWith('/')) {
         self.currentPath = handler.payload.action;
+        config.currentPath = handler.payload.action;
       }
 
       /**
@@ -73,8 +93,9 @@ class ZeitRouter implements ZeitRouterInterface {
        * @param path
        */
       const navigate = (path: string): void => {
-        if (path !== self.currentPath) {
+        if (path !== config.currentPath) {
           self.currentPath = path;
+          config.currentPath = handler.payload.action;
         }
       };
 
@@ -90,7 +111,7 @@ class ZeitRouter implements ZeitRouterInterface {
 
       const router = {
         get currentPath(): string {
-          return self.currentPath;
+          return config.currentPath;
         },
         /**
          * get the current route
