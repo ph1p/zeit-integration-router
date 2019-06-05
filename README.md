@@ -1,4 +1,4 @@
-## zeit-integration-router
+# zeit-integration-router
 
 <p align="center">
   <img src="./assets/kapture.gif">
@@ -9,23 +9,25 @@
 This is a small router concept for zeit integrations. It support the basic functionality of a router and some extras like parameters.
 
 **DEMO**: [https://zeit.co/integrations/integration-router](https://zeit.co/integrations/integration-router)
+**Example**: go to `src/example`
 
 ## How to?
 
-The only file you need is `libs/router.ts`. Import it at the top of your entrypoint.
-All `actions` which start with a `/`, will automatically navigate trough the matching route.
-
-Like this:
+The only file you need is `src/libs/router.ts`. Import it at the top of your entrypoint.
 
 ```javascript
-import app from './libs/router';
+import ZeitRouter from './libs/router';
+
+// with optinal start route (default: '/')
+const app = new ZeitRouter('/');
 ```
 
 `libs/router.ts` returns a class. The class has 2 Methods.
 
 ### add(path, cb)
 
-This method adds a route. You can define the parameters like ypu do in express or other frameworks:
+This method adds a route. You can define the path like yu do in `express` or other frameworks.
+The callback function gives you `handler(zeitClient, payload)`, `router` and `params`. You have to return a `htm` method.
 
 ```javascript
 app.add('/:id', ({ handler, router, params }) => {
@@ -61,7 +63,13 @@ export default app.uiHook(async (handler: HandlerOptions, router: Router) => {
 
 - Renders a specific route.
 
-### Example:
+## Routing
+
+All `actions` which start with a `/`, will automatically navigate trough a matching route.
+You can also navigate with the `router.navigate` method.
+
+
+## Full Example:
 
 ```javascript
 import ZeitRouter from './libs/router';
