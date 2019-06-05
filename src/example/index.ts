@@ -33,31 +33,64 @@ const uiHook = app.uiHook(async (handler: HandlerOptions, router: Router) => {
 
   // redirect if logged in or out
   if (userIsLoggedIn) {
-    return htm`<Page>
-    <Box backgroundColor="white" borderRadius="5px" border="1px solid #ddd" padding="15px">
-      ${await router.renderRoute('/login')}
-    </Box>
-  </Page>`;
+    return htm`
+      <Page>
+        <Box
+          backgroundColor="white"
+          borderRadius="5px"
+          border="1px solid #ddd"
+          padding="15px"
+        >
+          ${await router.renderRoute('/login')}
+        </Box>
+      </Page>
+    `;
   }
 
-  return htm`<Page>
+  return htm`
+    <Page>
       <Box display="grid" gridTemplateColumns="200px 1fr" gridGap="15px">
-        <Box backgroundColor="white" borderRadius="5px" border="1px solid #ddd" padding="15px" display="grid" gridTemplateRows="repeat(6, 35px)">
+        <Box
+          backgroundColor="white"
+          borderRadius="5px"
+          border="1px solid #ddd"
+          padding="15px"
+          display="grid"
+          gridTemplateRows="repeat(6, 35px)"
+        >
           <Button action="home" small highlight>home</Button>
-          <Button action="/parameter/4f96e758-8640-11e9-bc42-526af7764f64" small highlight>parameter</Button>
+          <Button
+            action="/parameter/4f96e758-8640-11e9-bc42-526af7764f64"
+            small
+            highlight
+          >
+            parameter
+          </Button>
           <Button action="/include" small highlight>include</Button>
           <Button action="/form" small highlight>form</Button>
           <Button action="/jump-to-home" small highlight>jump-to-home</Button>
           <Button action="/this-page-does-not-exist" small warning>fail</Button>
         </Box>
-        <Box backgroundColor="white" borderRadius="5px" border="1px solid #ddd" padding="15px">
+        <Box
+          backgroundColor="white"
+          borderRadius="5px"
+          border="1px solid #ddd"
+          padding="15px"
+        >
           ${await router.currentRoute}
         </Box>
-        <Box backgroundColor="white" gridColumn="1 / span 2" borderRadius="5px" border="1px solid #ddd" padding="15px">
-          Your are here: <B>${router.currentPath}</B>
+        <Box
+          backgroundColor="white"
+          gridColumn="1 / span 2"
+          borderRadius="5px"
+          border="1px solid #ddd"
+          padding="15px"
+        >
+          Your are here: <b>${router.currentPath}</b>
         </Box>
       </Box>
-    </Page>`;
+    </Page>
+  `;
 });
 
 export default uiHook;
