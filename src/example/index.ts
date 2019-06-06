@@ -12,8 +12,6 @@ app.add('/form', Form);
 app.add('/login', Login);
 app.add('/jump-to-home', JumpToHome);
 
-let userIsLoggedIn = false;
-
 const uiHook = app.uiHook(async (handler: HandlerOptions, router: Router) => {
   const metadata = await handler.zeitClient.getMetadata();
 
@@ -25,16 +23,13 @@ const uiHook = app.uiHook(async (handler: HandlerOptions, router: Router) => {
     await router.navigate('/');
   }
 
-  if (action === 'login') {
-    userIsLoggedIn = true;
-  }
-
-  if (action === 'logout') {
-    userIsLoggedIn = false;
+  if (action === 'login' || action === 'logout') {
+    metadata.userIsLoggedIn = action === 'login';
+    await handler.zeitClient.setMetadata(metadata);
   }
 
   // redirect if logged in or out
-  if (userIsLoggedIn) {
+  if (metadata.userIsLoggedIn) {
     return htm`
       <Page>
         <Box
