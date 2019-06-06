@@ -15,12 +15,14 @@ app.add('/jump-to-home', JumpToHome);
 let userIsLoggedIn = false;
 
 const uiHook = app.uiHook(async (handler: HandlerOptions, router: Router) => {
+  const metadata = await handler.zeitClient.getMetadata();
+
   const {
     payload: { action }
   } = handler;
 
   if (action === 'home') {
-    router.navigate('/');
+    await router.navigate('/');
   }
 
   if (action === 'login') {
@@ -86,7 +88,8 @@ const uiHook = app.uiHook(async (handler: HandlerOptions, router: Router) => {
           border="1px solid #ddd"
           padding="15px"
         >
-          Your are here: <b>${router.currentPath}</b>
+          From router parameter here: <B>${router.currentPath}</B><BR />
+          From MetaData: <B>${metadata.currentPath}</B>
         </Box>
       </Box>
     </Page>

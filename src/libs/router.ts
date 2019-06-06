@@ -10,12 +10,6 @@ import {
 
 class ZeitRouter implements ZeitRouterInterface {
   private routes: Array<RouteItem> = [];
-  private config: {
-    [configId: string]: {
-      currentPath: string;
-    };
-  } = {};
-  private currentConfiguration: string;
   public currentPath: string;
 
   /**
@@ -23,13 +17,7 @@ class ZeitRouter implements ZeitRouterInterface {
    * @param path
    */
   constructor(path: string = '/') {
-    this.currentPath = this.currentConfig
-      ? this.currentConfig.currentPath
-      : path;
-  }
-
-  get currentConfig() {
-    return this.config[this.currentConfiguration];
+    this.currentPath = path;
   }
 
   /**
@@ -71,31 +59,31 @@ class ZeitRouter implements ZeitRouterInterface {
     }
 
     return withUiHook(async (handler: HandlerOptions) => {
-      if (!self.currentConfig) {
-        self.config[handler.payload.configurationId] = {
-          currentPath: self.currentPath
-        };
-        self.currentConfiguration = handler.payload.configurationId;
-      }
+      const metadata = await handler.zeitClient.getMetadata();
 
-      const config = self.currentConfig || {
-        currentPath: self.currentPath
-      };
+      if (!metadata.currentPath) {
+        metadata.currentPath = self.currentPath;
+        await handler.zeitClient.setMetadata(metadata);
+      }
 
       // detect route
       if (handler.payload.action.startsWith('/')) {
         self.currentPath = handler.payload.action;
-        config.currentPath = handler.payload.action;
+
+        metadata.currentPath = self.currentPath;
+        await handler.zeitClient.setMetadata(metadata);
       }
 
       /**
        * navigate to a new route
        * @param path
        */
-      const navigate = (path: string): void => {
-        if (path !== config.currentPath) {
+      const navigate = async (path: string): Promise<void> => {
+        if (path !== metadata.currentPath) {
           self.currentPath = path;
-          config.currentPath = handler.payload.action;
+
+          metadata.currentPath = self.currentPath;
+          await handler.zeitClient.setMetadata(metadata);
         }
       };
 
@@ -111,13 +99,13 @@ class ZeitRouter implements ZeitRouterInterface {
 
       const router = {
         get currentPath(): string {
-          return config.currentPath;
+          return metadata.currentPath;
         },
         /**
          * get the current route
          */
         get currentRoute() {
-          return getRoute(handler, self.currentPath, {
+          return getRoute(handler, metadata.currentPath, {
             navigate,
             renderRoute
           });

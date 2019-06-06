@@ -22,6 +22,8 @@ import ZeitRouter from './libs/router';
 const app = new ZeitRouter('/');
 ```
 
+**Note**: The current route is saved to `currentPath` inside `metadata`, so do not overwrite it.
+
 `libs/router.ts` returns a class. The class has 2 Methods.
 
 ### add(path, cb)
@@ -51,7 +53,7 @@ export default app.uiHook(async (handler: HandlerOptions, router: Router) => {
 
 ## `router`-object
 
-#### navigate(path)
+#### async navigate(path)
 
 - Navigate through a specific route. Works only inside the `app.uiHook`.
 
@@ -95,7 +97,7 @@ const uiHook = app.uiHook(async (handler: HandlerOptions, router: Router) => {
   } = handler;
 
   if (action === 'home') {
-    router.navigate('/');
+    await router.navigate('/');
   }
 
   return htm`<Page>

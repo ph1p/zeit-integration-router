@@ -10,9 +10,9 @@ export async function Form({ handler = <HandlerOptions>{} }) {
         ? htm`<Notice type="info">${data}</Notice><BR />`
         : ''}
 
-      <b>Form</b><br /><br />
-      <input name="field" value=${data || ''} /><br /><br />
-      <button action="submit">Submit</button>
+      <B>Form</B><BR /><BR />
+      <Input name="field" value=${data || ''} /><BR /><BR />
+      <Button action="submit">Submit</Button>
     </Box>
   `;
 }

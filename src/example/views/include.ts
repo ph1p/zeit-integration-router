@@ -13,7 +13,7 @@ export async function Include({ router = <Router>{} }) {
       <BR /><BR />
 
       <Box border="1px solid #ddd" padding="20px">
-        <H2>I'm page <b>parameter</b></H2>
+        <H2>I'm page <B>parameter</B></H2>
         ${await router.renderRoute('/parameter/1234')}
       </Box>
     </Box>
