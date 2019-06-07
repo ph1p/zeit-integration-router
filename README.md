@@ -1,6 +1,6 @@
 # zeit-integration-router
 
-[![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/zeit/awesome-zeit-integrations)
+[![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/zeit/awesome-zeit-integrations) [![npm version](https://badge.fury.io/js/zeit-router.svg)](https://badge.fury.io/js/zeit-router)
 
 <p align="center">
   <img src="./assets/kapture.gif">
@@ -15,13 +15,15 @@ This is a small router concept for zeit integrations. It support the basic funct
 
 ## How to?
 
-The only file you need is `src/libs/router.ts`. Import it at the top of your entrypoint.
+The only package you need is `zeit-router`. Install and import it at the top of your entrypoint.
 
 ```bash
 npm i zeit-router
 # or
 yarn add zeit-router
 ```
+
+Create an instance:
 
 ```javascript
 import { ZeitRouter } from 'zeit-router';
