@@ -1,3 +1,6 @@
 assets
 src
 *.log
+tsconfig.*
+*.lock
+dist

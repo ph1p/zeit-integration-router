@@ -1,12 +1,29 @@
 {
-  "name": "zeit-integration-router",
+  "name": "zeit-router",
   "version": "0.0.1",
+  "main": "lib/router.js",
+  "types": "lib/types.d.ts",
+  "description": "A simple router for zeit.co integrations",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ph1p/zeit-integration-router"
+  },
+  "keywords": [
+    "router",
+    "zeit",
+    "integration",
+    "now"
+  ],
   "scripts": {
     "deploy": "now --target=production",
     "now:dev": "now dev -p 5005",
-    "build": "tsc ./src/libs/router --esModuleInterop --outDir ./dist",
+    "build": "tsc -p tsconfig.npm.json",
+    "prepublish": "npm run build",
     "dev": "concurrently \"tsc -w\" \"nodemon --exec micro dist/example/index.js -l tcp://localhost:5005\""
   },
+  "files": [
+    "lib/**/*"
+  ],
   "dependencies": {
     "@zeit/integration-utils": "latest",
     "route-parser": "^0.0.5"

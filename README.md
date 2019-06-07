@@ -17,8 +17,14 @@ This is a small router concept for zeit integrations. It support the basic funct
 
 The only file you need is `src/libs/router.ts`. Import it at the top of your entrypoint.
 
+```bash
+npm i zeit-router
+# or
+yarn add zeit-router
+```
+
 ```javascript
-import ZeitRouter from './libs/router';
+import { ZeitRouter } from 'zeit-router';
 
 // with optinal start route (default: '/')
 const app = new ZeitRouter('/');
@@ -28,10 +34,12 @@ const app = new ZeitRouter('/');
 
 `libs/router.ts` returns a class. The class has 2 Methods.
 
-### add(path, cb)
+### add(path, cb, silent)
 
 This method adds a route. You can define the path like you do in `express` or other frameworks.
 The callback function gives you `handler(zeitClient, payload)`, `router` and `params`. You have to return a `htm` method.
+`silent`(default: false): If this parameter is set to `true`, this page will not be rendered again after a reload and the previous page will be displayed instead.
+This is a useful flag for confirmation fields.
 
 ```javascript
 app.add('/:id', ({ handler, router, params }) => {
@@ -63,9 +71,14 @@ export default app.uiHook(async (handler: HandlerOptions, router: Router) => {
 
 - Shows the current route. Returns a promise.
 
+#### previousRoute
+
+- Shows the previous route. Returns a promise.
+
 #### renderRoute(path)
 
 - Renders a specific route.
+
 
 ## Routing
 
@@ -76,7 +89,7 @@ You can also navigate with the `router.navigate` method.
 ## Full Example:
 
 ```javascript
-import ZeitRouter from './libs/router';
+import { ZeitRouter } from 'zeit-router';
 import { HandlerOptions, Router } from '../types';
 
 const app = new ZeitRouter('/');
@@ -135,3 +148,8 @@ npm install && npm run now:dev
 [More information](https://zeit.co/docs/integrations/#creating-an-integration/step-2-creating-a-uihook/running-the-uihook-locally)
 
 You can also use `yarn dev` or `npm run dev`. This command will start a dev server which supports autoreloading on file change. (You need to install `nodemon`)
+
+
+## Used by:
+
+* Secrets (https://zeit.co/integrations/secrets)[https://zeit.co/integrations/secrets]

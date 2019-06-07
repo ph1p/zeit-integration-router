@@ -12,7 +12,7 @@
     "strict": true,
     "target": "ES2017",
     "typeRoots": ["./node_modules/@types"],
-    "outDir": "dist",
+    "outDir": "dist"
   },
   "include": ["src"]
 }

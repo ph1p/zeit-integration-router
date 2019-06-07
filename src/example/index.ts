@@ -1,5 +1,5 @@
 import { htm } from '@zeit/integration-utils';
-import ZeitRouter from '../libs/router';
+import { ZeitRouter } from '../router';
 import { Home, Parameter, Include, Form, JumpToHome, Login } from './views';
 import { HandlerOptions, Router } from '../types';
 
