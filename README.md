@@ -8,7 +8,7 @@
 
 ## What is this?
 
-This is a small router concept for zeit integrations. It support the basic functionality of a router and some extras like parameters.
+This is a small router concept for zeit integrations. It supports the basic functionality of a router and some extras like parameters.
 
 **DEMO**: [https://zeit.co/integrations/integration-router](https://zeit.co/integrations/integration-router)
 **Example**: go to `src/example`
@@ -154,4 +154,10 @@ You can also use `yarn dev` or `npm run dev`. This command will start a dev serv
 
 ## Used by:
 
-* Secrets (https://zeit.co/integrations/secrets)[https://zeit.co/integrations/secrets]
+* Secrets [https://zeit.co/integrations/secrets](https://zeit.co/integrations/secrets)
+  * Psst, it is also open source [https://github.com/ph1p/zeit-secrets-integration](https://github.com/ph1p/zeit-secrets-integration)
+
+
+## Contribute
+
+Feel free to add PRs or open Issues (:
