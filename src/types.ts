@@ -1,4 +1,4 @@
-import { HandlerOptions } from '@zeit/integration-utils';
+import { HandlerOptions as BaseHandlerOptions } from '@zeit/integration-utils';
 import { ZeitRouter } from './router';
 
 export interface Router {
@@ -8,7 +8,7 @@ export interface Router {
   renderRoute: (name: string) => Promise<string> | string;
   currentRoute?(): any;
 }
-export interface HandlerOptions extends HandlerOptions {
+export interface HandlerOptions extends BaseHandlerOptions {
   router?: Router;
 }
 
